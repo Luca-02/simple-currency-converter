@@ -1,0 +1,231 @@
+<script>
+    const currency = {{{json currency}}};
+    const exchange_rates = {{{json exchange_rates}}};
+</script>
+
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="border">
+        <div class="color-bar w-100"></div>
+        <div id="conversion-div" class="currency-container">
+            {{#if (error currency exchange_rates)}}
+                <div class="text-center">
+                    <i class="material-icons" style="font-size:48px;color:rgb(214, 30, 30)">warning</i>
+                    <h4 class="text-center" style="margin-bottom: 40px;">Ooops!</h4>
+                    <p class="text-center" style="margin: 0px;">Something went wrong, an error has occurred</p>
+                    <p class="text-center" style="margin: 0px;">Try refreshing the page.</p>
+                </div>
+
+                <button type="button" id="refresh-btn" class="btn btn-lg btn-block rounded-0 text-uppercase w-100 mt-40 my-btn">
+                    Refresh
+                </button>
+
+                <script>
+                    if (currency.error)
+                        console.log(`Currency error ${currency.code}: ${currency.error}`);
+                    if (exchange_rates.error)
+                        console.log(`Exchange rate error ${exchange_rates.code}: ${exchange_rates.error}`);
+
+                    const refreshBtn = document.getElementById('refresh-btn');
+                    refreshBtn.addEventListener('click', () => {
+                        window.location.reload();
+                    });
+                </script>
+            {{else}}
+                <div>
+                    <h2 class="text-center mb-60">Currency Converter</h2>
+                </div>
+
+                <div class="w-100">
+                    <p class="p-font">From</p>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <select id="from" class="custom-select rounded-0">
+                            {{#each currency}}
+                                <option value="{{@key}}"
+                                {{#if (isDefaultCurrency @key)}}
+                                    selected="selected"                        
+                                {{/if}}
+                                >
+                                    {{name}}
+                                </option>
+                            {{/each}}
+                        </select>
+                        </div>
+                        <input type="number" id="from-amount" min="0" placeholder="0.00" pattern="^\d+(?:\.\d{1,2})?$" class="form-control rounded-0">
+                        <span id="from-symbol-span" class="input-group-text rounded-0">
+                            {{default_currency.symbol_native}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="w-100">
+                    <p class="p-font mt-20">To</p>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <select id="to" class="custom-select rounded-0">
+                            {{#each currency}}
+                                <option value="{{@key}}"
+                                {{#if (isDefaultCurrency @key)}}
+                                    selected="selected"                        
+                                {{/if}}
+                                >
+                                    {{name}}
+                                </option>
+                            {{/each}}
+                        </select>
+                        </div>
+                        <input type="number" id="to-amount" min="0" placeholder="0.00" pattern="^\d+(?:\.\d{1,2})?$" class="form-control rounded-0">
+                        <span id="to-symbol-span" class="input-group-text rounded-0">
+                            {{default_currency.symbol_native}}
+                        </span>
+                    </div>
+                </div>
+
+                <button type="button" id="conversion-btn" class="btn btn-lg btn-block rounded-0 text-uppercase w-100 mt-40 my-btn">
+                    Reset
+                </button>
+            
+                <script>
+                    const fromSelect = document.getElementById('from');
+                    const toSelect = document.getElementById('to');
+                    const fromSymbolSpan = document.getElementById('from-symbol-span');
+                    const toSymbolSpan = document.getElementById('to-symbol-span');
+                    const fromAmount = document.getElementById('from-amount');
+                    const toAmount = document.getElementById('to-amount');
+                    const conversionBtn = document.getElementById('conversion-btn');
+
+                    conversionBtn.addEventListener('click', () => {
+                        reset();
+                    });
+
+                    fromSelect.addEventListener('change', () => {
+                        changeCurrency(fromSelect, fromSymbolSpan);
+                    });
+
+                    toSelect.addEventListener('change', () => {
+                        changeCurrency(toSelect, toSymbolSpan);
+                    });
+
+                    fromAmount.addEventListener('keyup', () => {
+                        handleConvertCurrency(fromSelect, fromAmount, toSelect, toAmount);
+                    });
+
+                    toAmount.addEventListener('keyup', () => {
+                        handleConvertCurrency(toSelect, toAmount, fromSelect, fromAmount);
+                    });
+
+                    function reset() {
+                        fromSelect.value = '{{default_currency.code}}';
+                        fromAmount.value = null;
+                        toSelect.value = '{{default_currency.code}}';
+                        toAmount.value = null;
+                        fromSelect.dispatchEvent(new Event('change'));
+                        toSelect.dispatchEvent(new Event('change'));
+                    }
+
+                    function changeCurrency(select, span) {
+                        span.innerHTML = currency[select.value].symbol_native;
+                        handleConvertCurrency(fromSelect, fromAmount, toSelect, toAmount);
+                    }
+
+                    function executeConversion(toAmount, from, to, amount) {
+                        const data = {
+                            from: from, 
+                            to: to,
+                            amount: amount,
+                            exchange_rates: exchange_rates
+                        };
+
+                        fetch('/api/conversion', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.converted_amount)
+                                setToAmountDOM(toAmount, data.converted_amount);
+                        });
+                    }
+
+                    function handleConvertCurrency(fromSelect, fromAmount, toSelect, toAmount) {
+                        const from = fromSelect.value;
+                        const to = toSelect.value;
+                        const amount = parseFloat(fromAmount.value);
+
+                        if (!isNaN(amount))
+                            executeConversion(toAmount, from, to, amount);
+                        else
+                            setToAmountDOM(toAmount, null);
+                    }
+
+                    function setToAmountDOM(amountDOM, value) {
+                        amountDOM.value = value;
+                    }
+                </script>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+<div class="area">
+    <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
