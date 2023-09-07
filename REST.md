@@ -72,9 +72,9 @@
 
     - **Description**: Given the from and to currency and the latest exchange rates, returns the currency conversion value.
 
-    - **Parametri**: The request must have the header `Content-Type: application/json`.
+    - **Parameters**: The request must have the header `Content-Type: application/json`.
 
-    - **Body richiesta**: The code of the from and to currency, the amount you want to convert, and a JSON list of the latest exchange rates.
+    - **Body**: The code of the from and to currency, the amount you want to convert, and a JSON list of the latest exchange rates.
         ```
         {
             from: [string], 

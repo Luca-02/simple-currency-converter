@@ -10,7 +10,7 @@ To optimize the application's performance and reduce the number of calls to exte
 
 ## Project Structure
 
-Il progetto è organizzato seguendo un'architettura MVC (Model-View-Controller) per una migliore separazione delle responsabilità:
+The project is organized following an MVC (Model-View-Controller) architecture for better separation of responsibilities:
 
 - `models/`: Contains data models or object definitions managed by the application.
 - `views/`: Contains the views of the application using the Handlebars template engine.
