@@ -4,13 +4,12 @@
 </script>
 
 <div class="container d-flex justify-content-center align-items-center">
-    <div class="border">
-        <div class="color-bar w-100"></div>
+    <div class="border my-background">
         <div id="conversion-div" class="currency-container">
             {{#if (error currency exchange_rates)}}
                 <div class="text-center">
                     <i class="material-icons" style="font-size:48px;color:rgb(214, 30, 30)">warning</i>
-                    <h4 class="text-center" style="margin-bottom: 40px;">Ooops!</h4>
+                    <h2 class="text-center" style="margin-bottom: 40px;">Ooops!</h2>
                     <p class="text-center" style="margin: 0px;">Something went wrong, an error has occurred</p>
                     <p class="text-center" style="margin: 0px;">Try refreshing the page.</p>
                 </div>
@@ -39,19 +38,19 @@
                     <p class="p-font">From</p>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                        <select id="from" class="custom-select rounded-0">
-                            {{#each currency}}
-                                <option value="{{@key}}"
-                                {{#if (isDefaultCurrency @key)}}
-                                    selected="selected"                        
-                                {{/if}}
-                                >
-                                    {{name}}
-                                </option>
-                            {{/each}}
-                        </select>
+                            <select id="from" class="custom-select rounded-0 my-background">
+                                {{#each currency}}
+                                    <option value="{{@key}}"
+                                    {{#if (isDefaultCurrency @key)}}
+                                        selected="selected"                        
+                                    {{/if}}
+                                    >
+                                        {{name}}
+                                    </option>
+                                {{/each}}
+                            </select>
                         </div>
-                        <input type="number" id="from-amount" min="0" placeholder="0.00" pattern="^\d+(?:\.\d{1,2})?$" class="form-control rounded-0">
+                        <input type="number" id="from-amount" min="0" placeholder="0.00" pattern="^\d+(?:\.\d{1,2})?$" class="form-control rounded-0 my-background">
                         <span id="from-symbol-span" class="input-group-text rounded-0">
                             {{default_currency.symbol_native}}
                         </span>
@@ -62,19 +61,19 @@
                     <p class="p-font mt-20">To</p>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                        <select id="to" class="custom-select rounded-0">
-                            {{#each currency}}
-                                <option value="{{@key}}"
-                                {{#if (isDefaultCurrency @key)}}
-                                    selected="selected"                        
-                                {{/if}}
-                                >
-                                    {{name}}
-                                </option>
-                            {{/each}}
-                        </select>
+                            <select id="to" class="custom-select rounded-0 my-background">
+                                {{#each currency}}
+                                    <option value="{{@key}}"
+                                    {{#if (isDefaultCurrency @key)}}
+                                        selected="selected"                        
+                                    {{/if}}
+                                    >
+                                        {{name}}
+                                    </option>
+                                {{/each}}
+                            </select>
                         </div>
-                        <input type="number" id="to-amount" min="0" placeholder="0.00" pattern="^\d+(?:\.\d{1,2})?$" class="form-control rounded-0">
+                        <input type="number" id="to-amount" min="0" placeholder="0.00" pattern="^\d+(?:\.\d{1,2})?$" class="form-control rounded-0 my-background">
                         <span id="to-symbol-span" class="input-group-text rounded-0">
                             {{default_currency.symbol_native}}
                         </span>

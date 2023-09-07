@@ -1,11 +1,7 @@
-const session_controller = require('../controllers/sessionController')
+const config = require('../config/config')
 const currency_model = require('../models/currencyModel');
+const session_controller = require('../controllers/sessionController')
 const hbs = require('../config/handlebars').hbs;
-
-const HOST = process.env.HOST || 'http://localhost:';
-const PORT = process.env.PORT || 3000;
-
-const URL = `${HOST}${PORT}`;
 
 async function fetchEndpointData(endpoint) {
     const request = await fetch(endpoint)
@@ -15,9 +11,9 @@ async function fetchEndpointData(endpoint) {
 
 const index_view = async (req, res) => {
     const currency = await session_controller.handleCurrencyData(
-        req.session, fetchEndpointData, `${URL}/api/currency`);
+        req.session, fetchEndpointData, `${config.URL}/api/currency`);
     const exchange_rates = await session_controller.handleExchangeRatesData(
-        req.session, fetchEndpointData, `${URL}/api/exchange_rates`);
+        req.session, fetchEndpointData, `${config.URL}/api/exchange_rates`);
 
     res.render('index', {
         style: 'index.css',

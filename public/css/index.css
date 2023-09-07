@@ -1,4 +1,3 @@
-
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -23,15 +22,14 @@ body {
     min-height: 100vh;
 }
 
-.border {
-    border: none !important;
-    background-color: white;
-    box-shadow: 10px 10px 10px 10px rgba(25, 25, 25, 0.25);
+.my-background {
+    background-color: rgba(255, 255, 255, 0.75);
 }
 
-.color-bar {
-    background-color: #256cd6;
-    height: 5px;
+.border {
+    border: none !important;
+    box-shadow: 10px 10px 10px 10px rgba(25, 25, 25, 0.25);
+    border-radius: 16px;
 }
 
 .currency-container {
@@ -190,8 +188,6 @@ body {
     animation-delay: 0s;
     animation-duration: 11s;
 }
-
-
 
 @keyframes animate {
 
