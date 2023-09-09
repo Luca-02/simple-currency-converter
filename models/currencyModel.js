@@ -1,4 +1,5 @@
-const default_currency = 'USD';
+const default_currency_code_from = 'USD';
+const default_currency_code_to = 'EUR';
 
 function getCurrenciesTest() {
     return {
@@ -35,7 +36,8 @@ function getExchangeRatesTest() {
 }
 
 module.exports = {
-    default_currency,
+    default_currency_code_from,
+    default_currency_code_to,
     getCurrenciesTest,
     getExchangeRatesTest
 };

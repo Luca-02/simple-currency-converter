@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "develop": "nodemon --config ./config/nodemon.json server.js"
+    "develop": "nodemon --config ./config/nodemon.json app.js"
   },
   "keywords": [],
   "author": "",

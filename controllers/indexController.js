@@ -1,34 +1,34 @@
-const config = require('../config/config')
 const currency_model = require('../models/currencyModel');
-const session_controller = require('../controllers/sessionController')
+const data_controller = require('../controllers/dataController');
+
 const hbs = require('../config/handlebars').hbs;
 
-async function fetchEndpointData(endpoint) {
-    const request = await fetch(endpoint)
-    const data = await request.json();
-    return data;
-}
-
 const index_view = async (req, res) => {
-    const currency = await session_controller.handleCurrencyData(
-        req.session, fetchEndpointData, `${config.URL}/api/currency`);
-    const exchange_rates = await session_controller.handleExchangeRatesData(
-        req.session, fetchEndpointData, `${config.URL}/api/exchange_rates`);
-
-    res.render('index', {
-        style: 'index.css',
-        currency,
-        exchange_rates,
-        default_currency: currency[currency_model.default_currency]
-    });
+    if (!req.session.currency) {
+        res.redirect('/error');
+    } else {
+        res.render('index', {
+            currency: req.session.currency,
+            default_currency_from: req.session.currency[currency_model.default_currency_code_from],
+            default_currency_to: req.session.currency[currency_model.default_currency_code_to],
+        });
+    }
 }
 
-hbs.handlebars.registerHelper('error', function(currency, exchange_rates) {
-    return currency.error || exchange_rates.error;
+const error_view = async (req, res) => {
+    const data = await data_controller.getCurrencies(req.session);
+    if (data.error)
+        res.render('error');
+    else 
+        res.redirect('/');
+}
+
+hbs.handlebars.registerHelper('isDefaultCurrencyFrom', function(value) {
+    return currency_model.default_currency_code_from == value;
 });
 
-hbs.handlebars.registerHelper('isDefaultCurrency', function(value) {
-    return currency_model.default_currency == value;
+hbs.handlebars.registerHelper('isDefaultCurrencyTo', function(value) {
+    return currency_model.default_currency_code_to == value;
 });
 
 hbs.handlebars.registerHelper('json', function(context) {
@@ -36,5 +36,6 @@ hbs.handlebars.registerHelper('json', function(context) {
 });
 
 module.exports =  { 
-    index_view
+    index_view,
+    error_view
 };

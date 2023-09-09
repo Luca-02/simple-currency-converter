@@ -15,7 +15,7 @@ The project is organized following an MVC (Model-View-Controller) architecture f
 - `models/`: Contains data models or object definitions managed by the application.
 - `views/`: Contains the views of the application using the Handlebars template engine.
 - `controllers/`: Contains controllers that handle HTTP requests and communicate with models and views.
-- `public/`: Contains static files such as CSS.
+- `public/`: Contains static files such as CSS or JavaScript.
 - `routes/`: Defines the routes and REST APIs of the application.
 - `config/`: Contains configuration files.
 
